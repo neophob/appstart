@@ -49,6 +49,10 @@ of course, there is more that that:
 * If a subfolder of the application folder named "lib" is found, every folder and jar file placed in there will be added to the classpath. You can configure the position of the lib folder in the appstart.properties file
 * If a file named "splash.img" is found in the application folder, it is used as a splash screen of the child java process. This feature requires the use of Java 6.
 
+The final command line run by Appstart is this:
+
+`${java.home}/bin/java <app.vm.options> -cp <app.class.path> -splash:splash.img <app.main.class>`
+
 ## Appstart configuration
 
 ### Config file properties
