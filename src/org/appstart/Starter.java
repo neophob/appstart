@@ -25,8 +25,6 @@ package org.appstart;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.SplashScreen;
-import java.awt.Toolkit;
-import java.beans.Beans;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -181,10 +179,13 @@ public class Starter {
         pb.redirectErrorStream(true);
         child = pb.start();
 
-        SplashScreen splash = SplashScreen.getSplashScreen();
-        if (splash != null) {
-            splash.close();
+        if (!GraphicsEnvironment.isHeadless()) {
+            SplashScreen splash = SplashScreen.getSplashScreen();
+            if (splash != null) {
+                splash.close();
+            }
         }
+
         if (follow) {
             log.info("starting follower thread");
             new FollowerThread().start();
@@ -222,7 +223,7 @@ public class Starter {
         @Override
         public void run() {
             InputStream stream = child.getInputStream();
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[4096];
             try {
                 int read = stream.read(buf);
                 while (read >= 0) {
