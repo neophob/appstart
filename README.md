@@ -10,7 +10,9 @@ I did some minor modifications:
 * removed the ugly splash screen, the splash screen can be customized in the properties file with the `-splash:./data/setup/splash.jpg` parameter
 * works in headless environments
 * mavenized project
+* load application specific properties file, if you rename appstart.jar to myApp.jar, appstart is looking for the properties files called myApp.properties.
 
+Last hint, start appstart with debug output: `java -Dappstart.verbose=true -jar appstart-0.2.jar`
 
 ## Introduction
 One of the frustrations about writing Java desktop applications is the setup needed to launch the Java Virtual Machine. This is often implemented using some platform-dependent launch scripts, which their only role is to find a suitable JRE and launch it with some options.

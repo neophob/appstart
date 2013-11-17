@@ -51,7 +51,7 @@ public class Starter {
     public static final String APP_VM_OPTIONS = "app.vm.options";
     public static final String APP_CLASS_PATH = "app.class.path";
     public static final String APP_LIBS_DIR = "app.libs.dir";
-    public static final String APPSTART_FILE = "appstart.properties";
+    public static final String APPSTART_FALLBACK_CONFIG_FILE = "appstart.properties";
     public static final String JAVA_PATH = "bin" + File.separator + "java";
     /**
      * Holds the child process
@@ -62,25 +62,40 @@ public class Starter {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+    	String configFilename = APPSTART_FALLBACK_CONFIG_FILE;
         if (!Boolean.getBoolean("appstart.verbose")) {
             log.setLevel(Level.WARNING);
+            System.out.println("WARN");
         }
         File java = new File(System.getProperty("java.home"), JAVA_PATH);
         log.info("using java in " + java.getParent());
 
         // get the class path URLs
         URL launcherUrl = ((URLClassLoader) Starter.class.getClassLoader()).getURLs()[0];
-System.out.println("url: "+launcherUrl.toString());
-System.out.println("File: "+launcherUrl.getFile());
-        // search for a appstart.properties file
+
         File appstartDir = new File(launcherUrl.toURI());
         if (appstartDir.isFile()) {
             appstartDir = appstartDir.getParentFile();
         }
         log.info("appstart dir: " + appstartDir);
 
-        Properties launchProps = findLaunchProperties(appstartDir, new Properties());
-        String appstartPath = System.getProperty(APPSTART_FILE);
+        //try to find local properties file, equals to start jar
+        String thisFilename = new File(launcherUrl.getFile()).getName();
+        String priorityConfig = "";
+        log.info("launched from " + thisFilename);
+        if (thisFilename.lastIndexOf(".")>0) {
+        	priorityConfig = thisFilename.substring(0, thisFilename.lastIndexOf("."))+".properties";
+        	log.info("look for application specific config file: "+priorityConfig);
+        	File f = new File(appstartDir, priorityConfig);
+        	if (f.canRead()) {
+        		configFilename = priorityConfig;
+        		log.info("use application specific config file: "+priorityConfig);
+        	}
+        }
+
+        // search for a appstart.properties file
+        Properties launchProps = findLaunchProperties(appstartDir, new Properties(), configFilename);
+        String appstartPath = System.getProperty(configFilename);
         if (appstartPath != null) {
             try {
                 InputStream in = new FileInputStream(appstartPath);
@@ -96,11 +111,11 @@ System.out.println("File: "+launcherUrl.getFile());
         }
 
         if (launchProps == null) {
-            log.severe("missing config file " + APPSTART_FILE);
+            log.severe("missing config file " + configFilename);
             if (!GraphicsEnvironment.isHeadless()) {
                 javax.swing.JOptionPane.showMessageDialog(
                         null,
-                        "Missing config file " + APPSTART_FILE,
+                        "Missing config file " + configFilename,
                         "Error starting application",
                         javax.swing.JOptionPane.ERROR_MESSAGE);
             }
@@ -190,9 +205,9 @@ System.out.println("File: "+launcherUrl.getFile());
         //System.exit(0);
     }
 
-    private static Properties findLaunchProperties(File file, Properties launchProps) throws IOException {
+    private static Properties findLaunchProperties(File file, Properties launchProps, String configFilename) throws IOException {
 //        System.out.println("searching launch.properties in " + file);
-        File propFile = new File(file, APPSTART_FILE);
+        File propFile = new File(file, configFilename);
         if (propFile.isFile()) {
 //            System.out.println("found launch.properties here");
             launchProps = new Properties(launchProps);
