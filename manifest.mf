@@ -1,2 +1,0 @@
-Manifest-Version: 1.0
-SplashScreen-Image: org/appstart/loading.gif

@@ -65,13 +65,12 @@ public class Starter {
         if (!Boolean.getBoolean("appstart.verbose")) {
             log.setLevel(Level.WARNING);
         }
-        File java = new File(System.getProperty("java.home"),
-                JAVA_PATH);
+        File java = new File(System.getProperty("java.home"), JAVA_PATH);
         log.info("using java in " + java.getParent());
 
         // get the class path URLs
         URL launcherUrl = ((URLClassLoader) Starter.class.getClassLoader()).getURLs()[0];
-
+System.out.println("url: "+launcherUrl.toString());
         // search for a appstart.properties file
         File appstartDir = new File(launcherUrl.toURI());
         if (appstartDir.isFile()) {

@@ -5,6 +5,13 @@ The Universal Java Application Launcher
 
 This is just a fork from http://code.google.com/p/appstart/! All code by mdallav@gmail.com.
 
+I did some minor modifications:
+
+* removed the ugly splash screen, the splash screen can be customized in the properties file with the `-splash:./data/setup/splash.jpg` parameter
+* works in headless environments
+* mavenized project
+
+
 ## Introduction
 One of the frustrations about writing Java desktop applications is the setup needed to launch the Java Virtual Machine. This is often implemented using some platform-dependent launch scripts, which their only role is to find a suitable JRE and launch it with some options.
 
