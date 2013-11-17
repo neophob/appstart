@@ -71,6 +71,7 @@ public class Starter {
         // get the class path URLs
         URL launcherUrl = ((URLClassLoader) Starter.class.getClassLoader()).getURLs()[0];
 System.out.println("url: "+launcherUrl.toString());
+System.out.println("File: "+launcherUrl.getFile());
         // search for a appstart.properties file
         File appstartDir = new File(launcherUrl.toURI());
         if (appstartDir.isFile()) {
@@ -111,21 +112,18 @@ System.out.println("url: "+launcherUrl.toString());
                 appstartDir,
                 launchProps.getProperty("app.class.path", "")).getPath().concat(File.pathSeparator);
 
-        File libsDir = new File(appstartDir, launchProps.getProperty(
-                "app.libs.dir", "lib"));
+        File libsDir = new File(appstartDir, launchProps.getProperty("app.libs.dir", "lib"));
         log.info("libs dir: " + libsDir);
         if (libsDir.isDirectory()) {
             File[] libs = libsDir.listFiles();
             for (File lib : libs) {
-                classpath = classpath.concat(lib.getAbsolutePath()).
-                        concat(File.pathSeparator);
+                classpath = classpath.concat(lib.getAbsolutePath()).concat(File.pathSeparator);
             }
         }
         log.info("classpath = " + classpath);
 
         List<String> vmOptions = new ArrayList<String>();
-        String vmOptionsString = launchProps.getProperty(
-                APP_VM_OPTIONS, "");
+        String vmOptionsString = launchProps.getProperty(APP_VM_OPTIONS, "");
         log.info("vmoptions = " + vmOptionsString);
         for (StringTokenizer st = new StringTokenizer(vmOptionsString); st.hasMoreTokens();) {
             String token = st.nextToken();
@@ -135,11 +133,10 @@ System.out.println("url: "+launcherUrl.toString());
         // build system properties based on the key=value of the appstart.properties file
         List<String> systemProps = new ArrayList<String>();
         for (String prop : launchProps.stringPropertyNames()) {
-            systemProps.add(String.format(
-                    "-D%s=%s", prop, launchProps.getProperty(prop)));
+            systemProps.add(String.format("-D%s=%s", prop, launchProps.getProperty(prop)));
         }
-        String mainClass = launchProps.getProperty(
-                APPSTART_MAIN_CLASS);
+        String mainClass = launchProps.getProperty(APPSTART_MAIN_CLASS);
+        
         log.info("main class = " + mainClass);
         if (mainClass == null) {
             log.severe("Missing " + APPSTART_MAIN_CLASS + " config entry");
@@ -154,8 +151,7 @@ System.out.println("url: "+launcherUrl.toString());
         }
 
         // flag to follow child process output
-        Boolean follow = Boolean.parseBoolean(launchProps.getProperty(
-                "app.follow", "false"));
+        Boolean follow = Boolean.parseBoolean(launchProps.getProperty("app.follow", "false"));
         File splashFile = new File(appstartDir, DEFAULT_SPLASH_IMG);
 
         ArrayList<String> cmd = new ArrayList<String>();

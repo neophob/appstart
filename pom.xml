@@ -83,6 +83,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			
 			<!-- Package all files together -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -99,7 +100,6 @@
 							<finalName>appstart</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<outputDirectory>target</outputDirectory>
-							<!--<outputDirectory>${project.build.directory}</outputDirectory>-->
 							<descriptors>
 								<descriptor>${basedir}/src/main/assembly/assembly.xml</descriptor>
 							</descriptors>
@@ -124,6 +124,9 @@
 							<url>${project.url}</url>
 						</manifestEntries>						
 					</archive>
+					<excludes>
+						<exclude>**/resources/*</exclude>
+					</excludes> 
 					<outputDirectory>target/appstart/appstart</outputDirectory>
 				</configuration>
 			</plugin>

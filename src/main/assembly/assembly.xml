@@ -14,7 +14,7 @@
 			<outputDirectory>/</outputDirectory>
 		</file>
  		<file>
-			<source>${basedir}/src/main/resources/appstart.properties</source>
+			<source>${basedir}/src/main/resourcesX/appstart.properties</source>
 			<outputDirectory>/</outputDirectory>
 			<filtered>false</filtered>
 		</file>
