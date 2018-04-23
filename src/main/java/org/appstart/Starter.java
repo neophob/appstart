@@ -65,13 +65,13 @@ public class Starter {
     	String configFilename = APPSTART_FALLBACK_CONFIG_FILE;
         if (!Boolean.getBoolean("appstart.verbose")) {
             log.setLevel(Level.WARNING);
-            System.out.println("WARN");
+            //System.out.println("WARN");
         }
         File java = new File(System.getProperty("java.home"), JAVA_PATH);
         log.info("using java in " + java.getParent());
 
         // get the class path URLs
-        URL launcherUrl = ((URLClassLoader) Starter.class.getClassLoader()).getURLs()[0];
+        URL launcherUrl = Starter.class.getProtectionDomain().getCodeSource().getLocation();
 
         File appstartDir = new File(launcherUrl.toURI());
         if (appstartDir.isFile()) {
